@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация | Гостиница "Забегаловка"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="header" role="banner" data-fixed="true">
+  <div class="header_container">
+    <div class="header_logo">
+      <img src="Гостиница (1).png" alt="Логотип гостиницы">
+    </div>
+    <div class="header_content">
+      <div class="header_bar">
+        <nav class="menu">
+          <ul class="menu_list">
+            <li class="menu_list_item"><a class="menu_link" href="/indexAfterRegistration.html">Главная</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/booking">Бронирование</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/registartionAfter.html">Регистрация</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/loginAfterRegistration.html">Вход</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/storyOfApplication.html">История</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="auth-container">
+  <section class="auth-form">
+    <h2 style="color:blue">Регистрация</h2>
+    <form id="register-form">
+      <div class="form-group">
+        <label for="username" style="color:black" >Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="email" style="color:black">Email:</label>
+        <input type="text" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password" style="color:black">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password" style="color:black">Повторите пароль:</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+      </div>
+
+      <button type="submit" class="primary-button">Зарегистрироваться</button>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Гостиница "Забегаловка"</p>
+</footer>
+
+<script>
+  document.getElementById('register-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const userName = document.getElementById('username').value;
+    const userEmail = document.getElementById('email').value;
+    const userPassword = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    if (userPassword !== confirmPassword) {
+      alert("Пароли не совпадают!");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, userEmail, userPassword })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Успешная регистрация!");
+        window.location.href = '/login';
+      } else {
+        alert("Ошибка: " + data.error);
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert("Произошла ошибка при регистрации.");
+    }
+  });
+</script>
+</body>
+</html>

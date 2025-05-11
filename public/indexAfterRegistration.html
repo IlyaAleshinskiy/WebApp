@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Гостиница "Уютная"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="header" role="banner" data-fixed="true">
+  <div class="header_container">
+    <div class="header_logo">
+      <img src="Гостиница (1).png" alt="Логотип гостиницы">
+    </div>
+    <div class="header_content">
+      <div class="header_bar">
+        <nav class="menu">
+          <ul class="menu_list">
+            <li class="menu_list_item"><a class="menu_link" href="/indexAfterRegistration.html">Главная</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/booking">Бронирование</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/registartionAfter.html">Регистрация</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/loginAfterRegistration.html">Вход</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/storyOfApplication.html">История</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<div class="room-container">
+  <div class="room-image">
+    <img src="room-type1.png" alt="Изображение номера">
+  </div>
+  <div class="room-details">
+    <h2>Комфортно каждому гостю</h2>
+    <p>
+      Номера представлены в различных категориях, чтобы удовлетворить потребности каждого гостя. Во всех номерах есть кухня со всем необходимым. Современная мебель и техника позволяют отдыхать и работать с комфортом.
+    </p>
+    <div class="pagination">
+      <button class="prev">←</button>
+      <span class="current-page">1</span>
+      <span class="span_div">/</span>
+      <span class="total-pages">6</span>
+      <button class="next">→</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    let rooms = [];
+    let currentPage = 1;
+
+    try {
+      // Получаем данные о номерах через fetch
+      const response = await fetch('/api/type_room'); // Убедитесь, что путь правильный
+      if (!response.ok) {
+        console.error('Не удалось получить данные о номерах');
+      }
+      rooms = await response.json(); // Преобразуем ответ в JSON
+
+      // Инициализация первого номера
+      showRoom(currentPage);
+      updatePagination(rooms.length);
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Произошла ошибка при загрузке данных.');
+    }
+
+    // Обновление деталей номера
+    function updateRoomDetails(room) {
+      const roomImage = document.querySelector(".room-image img");
+      const roomTitle = document.querySelector(".room-details h2");
+      const roomDescription = document.querySelector(".room-details p");
+
+      roomImage.src = room.image;
+      roomTitle.textContent = room.name;
+      roomDescription.textContent = room.description;
+    }
+
+    // Обновление пагинации
+    function updatePagination(totalPages) {
+      const currentPageSpan = document.querySelector(".current-page");
+      const totalPagesSpan = document.querySelector(".total-pages");
+
+      currentPageSpan.textContent = currentPage;
+      totalPagesSpan.textContent = totalPages;
+    }
+
+    // Показать конкретный номер
+    function showRoom(id) {
+      const room = rooms.find(r => r.id === id);
+      if (room) {
+        updateRoomDetails(room);
+        updatePagination(rooms.length);
+      }
+    }
+
+    // Обработчики кнопок переключения
+    document.querySelector(".prev").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showRoom(currentPage);
+      }
+    });
+
+    document.querySelector(".next").addEventListener("click", () => {
+      if (currentPage < rooms.length) {
+        currentPage++;
+        showRoom(currentPage);
+      }
+    });
+  });
+</script>
+
+
+<main>
+  <section id="welcome">
+    <h2>Добро пожаловать!</h2>
+    <p>Наша гостиница предлагает комфортные номера по доступным ценам.</p>
+    <button onclick="window.location.href='/booking'">Забронировать номер</button>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Гостиница "Забегаловка"</p>
+</footer>
+</body>
+</html>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    let rooms = [];
+    let currentPage = 1;
+
+    try {
+      // Получаем данные о номерах через fetch
+      const response = await fetch('/api/room_types'); // Убедитесь, что путь правильный
+      if (!response.ok) {
+        console.error('Не удалось получить данные о номерах');
+      }
+      rooms = await response.json(); // Преобразуем ответ в JSON
+
+      // Инициализация первого номера
+      showRoom(currentPage);
+      updatePagination(rooms.length);
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Произошла ошибка при загрузке данных.');
+    }
+
+    // Обновление деталей номера
+    function updateRoomDetails(room) {
+      const roomImage = document.querySelector(".room-image img");
+      const roomTitle = document.querySelector(".room-details h2");
+      const roomDescription = document.querySelector(".room-details p");
+
+      roomImage.src = room.image;
+      roomTitle.textContent = room.name;
+      roomDescription.textContent = room.description;
+    }
+
+    // Обновление пагинации
+    function updatePagination(totalPages) {
+      const currentPageSpan = document.querySelector(".current-page");
+      const totalPagesSpan = document.querySelector(".total-pages");
+
+      currentPageSpan.textContent = currentPage;
+      totalPagesSpan.textContent = totalPages;
+    }
+
+    // Показать конкретный номер
+    function showRoom(id) {
+      const room = rooms.find(r => r.id === id);
+      if (room) {
+        updateRoomDetails(room);
+        updatePagination(rooms.length);
+      }
+    }
+
+    // Обработчики кнопок переключения
+    document.querySelector(".prev").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showRoom(currentPage);
+      }
+    });
+
+    document.querySelector(".next").addEventListener("click", () => {
+      if (currentPage < rooms.length) {
+        currentPage++;
+        showRoom(currentPage);
+      }
+    });
+  });

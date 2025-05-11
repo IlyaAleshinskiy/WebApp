@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Гостиница "Кристина"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header" role="banner" data-fixed="true">
+    <div class="header_container">
+      <div class="header_logo">
+        <img src="Гостиница (1).png" alt="Логотип гостиницы">
+      </div>
+      <div class="header_content">
+       <div class="header_bar">
+         <nav class="menu">
+           <ul class="menu_list">
+             <li class="menu_list_item"><a class="menu_link" href="/indexForWorker.html">Главная</a></li>
+             <li class="menu_list_item"><a class="menu_link" href="/employee.html">Заявки</a></li>
+             <li class="menu_list_item"><a class="menu_link" href="/registerForWorker.html">Регистрация</a></li>
+             <li class="menu_list_item"><a class="menu_link" href="/loginForWorker.html">Вход</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  <div class="dashboard">
+    <h2>Личный кабинет сотрудника</h2>
+    <div class="application_details">
+      <div class="application_"><strong>Заявка №: </strong> <p id="application_">Нет</p></div>
+      <div class="application_name"><strong>ФИО:</strong> <p id="name">Нет</p></div>
+      <div class="application_room"><strong>Номер:</strong> <p id="room">Нет</p></div>
+      <div class="application_basicSeat"><strong>Количество основных мест:</strong> <p id="basicSeat">Нет</p></div>
+      <div class="application_additionalSeat"><strong>Количество дополнительных мест:</strong> <p id="additionalSeat">Нет</p></div>
+      <div class="application_in"><strong>Дата заезда:</strong> <p id="in">Нет</p></div>
+      <div class="application_out"><strong>Дата выезда:</strong> <p id="out">Нет</p></div>
+      <div class="application_actions">
+       <button class="approve-btn">Одобрить</button>
+       <button class="reject-btn">Отказать</button>
+      </div>
+    </div>
+    <div class="pagination">
+      <button class="prev">←</button>
+      <span class="current-page-employee">1</span> / <span class="total-pages-employee">1</span>
+     <button class="next">→</button>
+    </div>
+  </div>
+  </header>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    let applications = [];
+    let currentPage = 0;
+
+    try {
+      // Получаем данные о заявках через fetch
+      const response = await fetch('/api/booking'); // Убедитесь, что путь правильный
+      if (!response.ok) {
+        console.error('Не удалось получить данные о заявках');
+        return;
+      }
+      applications = await response.json(); // Преобразуем ответ в JSON
+
+      // Инициализация первой заявки
+      if (applications.length > 0) {
+        showApplication(currentPage);
+        updatePagination(applications.length);
+      } else {
+        alert('Нет заявок для отображения.');
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Произошла ошибка при загрузке данных.');
+    }
+
+    // Обновление деталей заявки
+    function updateApplicationDetails(application) {
+      const applicationID = document.querySelector("#application_");
+      const applicationFullName = document.querySelector("#name");
+      const applicationRoom = document.querySelector("#room");
+      const applicationBasicSeat = document.querySelector("#basicSeat");
+      const applicationAdditionalSeat = document.querySelector("#additionalSeat");
+      const applicationIn = document.querySelector("#in");
+      const applicationOut = document.querySelector("#out");
+
+      // Форматируем даты
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+      }
+
+      applicationID.textContent = application.id || 'Нет данных';
+      applicationFullName.textContent = application.fullName || 'Нет данных';
+      applicationRoom.textContent = application.room || 'Нет данных';
+      applicationBasicSeat.textContent = application.basic_seat || 'Нет данных';
+      applicationAdditionalSeat.textContent = application.additional_seat || 0;
+      applicationIn.textContent = formatDate(application.in) || 'Нет данных';
+      applicationOut.textContent = formatDate(application.out) || 'Нет данных';
+    }
+
+    // Показать конкретную заявку
+    function showApplication(index) {
+      const application = applications[index];
+      if (application) {
+        updateApplicationDetails(application);
+        updatePagination(applications.length);
+      } else {
+        console.error('Заявка не найдена');
+      }
+    }
+
+    // Обновление пагинации (страниц)
+    function updatePagination(totalPages) {
+      const currentPageSpan = document.querySelector(".current-page-employee");
+      const totalPagesSpan = document.querySelector(".total-pages-employee");
+
+      currentPageSpan.textContent = 1 + currentPage;
+      totalPagesSpan.textContent = totalPages;
+    }
+
+    // Обработчики кнопок переключения
+    document.querySelector(".prev").addEventListener("click", () => {
+      if (currentPage > 0) {
+        currentPage--;
+        showApplication(currentPage);
+      }
+    });
+
+    document.querySelector(".next").addEventListener("click", () => {
+      if (currentPage < applications.length - 1) {
+        currentPage++;
+        showApplication(currentPage);
+      }
+    });
+  });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Обновление статуса заявки
+      async function updateStatus(status) {
+        const applicationID = document.querySelector('#application_').textContent.trim();
+
+        // Проверяем, что ID заявки существует
+        if (!applicationID || applicationID === 'Нет') {
+          return alert('ID заявки не найден.');
+        }
+
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+
+          const response = await fetch('/api/application', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: Number(applicationID), id_status:status, workerEmail:urlParams.get('workerEmail') })
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert("Статус заявки успешно обновлен: " + JSON.stringify(data));
+            location.reload();
+          } else {
+            alert("Ошибка: " + data.error);
+          }
+        } catch (error) {
+          console.error('Ошибка:', error);
+          alert("Произошла ошибка при отправке данных.");
+        }
+      }
+
+      // Обработчики кнопок "Одобрить" и "Отказать"
+      document.querySelector('.approve-btn').addEventListener('click', async () => {
+        await updateStatus(1); // Статус "Одобрено"
+      });
+
+      document.querySelector('.reject-btn').addEventListener('click', async () => {
+        await updateStatus(2); // Статус "Отклонено"
+      });
+    });
+</script>
+</body>
+</html>

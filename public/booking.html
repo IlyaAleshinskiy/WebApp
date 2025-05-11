@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование номера | Гостиница "Кристина"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header" role="banner" data-fixed="true">
+    <div class="header_container">
+      <div class="header_logo">
+        <img src="Гостиница (1).png" alt="Логотип гостиницы">
+      </div>
+      <div class="header_content">
+       <div class="header_bar">
+          <nav class="menu">
+            <ul class="menu_list">
+              <li class="menu_list_item"><a class="menu_link" href="/indexAfterRegistration.html">Главная</a></li>
+              <li class="menu_list_item"><a class="menu_link" href="/booking">Бронирование</a></li>
+              <li class="menu_list_item"><a class="menu_link" href="/registartionAfter.html">Регистрация</a></li>
+              <li class="menu_list_item"><a class="menu_link" href="/loginAfterRegistration.html">Вход</a></li>
+              <li class="menu_list_item"><a class="menu_link" href="/storyOfApplication.html">История</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="booking-container">
+    <section class="booking-form">
+      <h2 style="color:blue">Забронируйте номер</h2>
+      <form id="booking-form">
+        <div class="form-group">
+          <label for="room-type" style="color:black">Тип номера:</label>
+          <select id="room-type" name="type_" required>
+            <option value="">Загрузка типов номеров...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="basic-seats" style="color:black">Число основных мест:</label>
+          <select id="basic-seats" name="basic-seats" required>
+            <option value="">Выберите количество</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="additional-seats" style="color:black">Число дополнительных мест:</label>
+          <select id="additional-seats" name="additional-seats" required>
+            <option value="">Выберите количество</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="check-in" style="color:black">Дата заезда:</label>
+          <input type="date" id="check-in" name="check-in" required>
+        </div>
+
+        <div class="form-group">
+          <label for="check-out" style="color:black">Дата выезда:</label>
+          <input type="date" id="check-out" name="check-out" required>
+        </div>
+
+        <button type="submit" class="primary-button">Забронировать</button>
+      </form>
+    </section>
+
+    <section class="confirmation" id="confirmation" style="display: none;">
+      <h2 class="success-message">Бронь успешно создана!</h2>
+      <p>Ваш номер забронирован. Подробности:</p>
+      <ul class="booking-details">
+        <li><strong>Тип номера:</strong> <span id="type-display"></span></li>
+        <li><strong>Число основных мест:</strong> <span id="basic-seats-display"></span></li>
+        <li><strong>Число дополнительных мест:</strong> <span id="additional-seats-display"></span></li>
+        <li><strong>Дата заезда:</strong> <span id="check-in-display"></span></li>
+        <li><strong>Дата выезда:</strong> <span id="check-out-display"></span></li>
+      </ul>
+    </section>
+  </main>
+
+<footer>
+  <p>&copy; 2025 Гостиница "Кристина"</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      // Загрузка типов номеров
+      const roomTypesResponse = await fetch('/api/type_room2');
+      const roomTypes = await roomTypesResponse.json();
+
+      const roomTypeSelect = document.getElementById('room-type');
+      roomTypeSelect.innerHTML = ''; // Очищаем выпадающий список
+
+      roomTypes.forEach((type) => {
+        const option = document.createElement('option');
+        option.value = type.id_type_room;
+        option.textContent = type.name;
+        roomTypeSelect.appendChild(option);
+      });
+
+      // Обновление выпадающих списков при изменении типа номера
+      roomTypeSelect.addEventListener('change', () => {
+        const selectedType = roomTypes.find(type => type.id_type_room == roomTypeSelect.value);
+
+        if (selectedType) {
+          populateSeatsDropdown('basic-seats', selectedType.basic_seats);
+          populateSeatsDropdown('additional-seats', selectedType.additional_seats);
+        }
+      });
+
+      // Функция для заполнения выпадающего списка мест
+      function populateSeatsDropdown(selectId, maxSeats) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = ''; // Очищаем выпадающий список
+
+        for (let i = 0; i <= maxSeats; i++) {
+          const option = document.createElement('option');
+          option.value = i;
+          option.textContent = i;
+          select.appendChild(option);
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      alert('Не удалось загрузить данные. Попробуйте позже.');
+    }
+  });
+</script>
+<script>
+  document.getElementById('booking-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    let client_phone;
+    const urlParams = new URLSearchParams(window.location.search);
+// Получаем данные из формы
+    const type_room = document.getElementById('room-type').value;
+    client_phone = urlParams.get('userEmail');
+    const basic_seats = document.getElementById('basic-seats').value;
+    const additional_seats = document.getElementById('additional-seats').value;
+    const date_in = document.getElementById('check-in').value;
+    const date_out = document.getElementById('check-out').value;
+    // Отправляем данные на сервер
+    try {
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type_room, client_phone, basic_seats, additional_seats, date_in, date_out})
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Бронь создана: ' + JSON.stringify(data));
+      } else {
+        alert('Ошибка: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert("Произошла ошибка при отправке данных.");
+    }
+  });
+</script>
+</body>
+</html>

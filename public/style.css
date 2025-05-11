@@ -1,0 +1,468 @@
+@font-face {
+    font-family: "JetBrains Sans";
+    src: url("fonts/JetBrainsSans-Regular.woff2");
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("fonts/JetBrainsMono-Regular.woff2");
+}
+
+:root {
+    font-family: "JetBrains Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #000000;
+    text-align: center;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 320px;
+    min-height: 100vh;
+    align-items: center;
+
+    background-image: url("background.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+h1 {
+    font-size: 29px;
+    line-height: 39px;
+    font-weight: 300;
+}
+
+.title {
+    margin-bottom: 40px;
+}
+
+#app {
+    max-width: 1280px;
+}
+
+.logo {
+    margin-top: 45px;
+    margin-left: 20%;
+    align-self: flex-start;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.counter {
+    font-family: "JetBrains Mono", Inter, system-ui, sans-serif;
+    font-weight: 400;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 60px;
+    color: rgba(255, 255, 255, 1);
+}
+
+.counter-interaction {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px 0;
+    width: 470px;
+    justify-content: space-between;
+}
+
+.counter-interaction button {
+    width: 48%;
+    height: 47%;
+    align-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 120px;
+    font-size: 68px;
+    text-align: center;
+}
+
+.counter-interaction button:nth-child(2n+1) {
+    margin-right: 14px;
+}
+
+.counter-interaction button:disabled {
+    color: rgba(255, 255, 255, 0.5);
+    background-image: none;
+    border-color: inherit;
+}
+
+.counter-info {
+    width: 360px;
+    height: 345px;
+    margin-right: 27px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(25, 25, 28, 0.5);
+    border-radius: 29px;
+}
+
+.counter-text {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 24px;
+    margin-top: 60px;
+    margin-bottom: 28px;
+
+}
+
+.counter-value {
+    font-weight: 200;
+    font-size: 170px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+button {
+    font-family: "JetBrains Mono", Inter, system-ui, sans-serif;
+    background-color: rgba(25, 25, 28, 0.5);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 1);
+}
+
+button:hover {
+    background-image: radial-gradient(
+            farthest-corner at 77% 83%,
+            rgba(1, 197, 245, 0.5) 2%,
+            rgba(1, 126, 254, 0.5) 28%,
+            rgba(25, 25, 28, 0) 70%
+    );
+    border: 1px solid rgba(76, 166, 255, 0.2);
+    background-clip: padding-box;
+}
+
+.technologies {
+    margin-bottom: 36px;
+    align-self: center;
+}
+
+.technologies img {
+    max-width: fit-content;
+}
+
+
+@media (max-width: 875px) {
+
+    .logo {
+        margin-top: 10px;
+    }
+
+    .title {
+        margin-bottom: 30px;
+    }
+
+    .counter {
+        flex-direction: column;
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .counter-info {
+        width: 100%;
+        height: 300px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .counter-interaction {
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        width: auto;
+    }
+
+    .counter-interaction button {
+        width: 47%;
+        height: 100px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+}
+.booking-container,
+.auth-container {
+    padding: 5rem 0;
+    text-align: center;
+}
+.booking-form,
+.auth-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form input[type="date"],
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.auth-form .primary-button {
+    margin-top: 1rem;
+}
+
+.header {
+    color: white;
+    height: auto;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.header_container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.header_content {
+    background-color: rgb(193, 141, 89);
+    display: flex;
+    flex-wrap: wrap;
+    width: 88%;
+}
+
+.header_bar {
+    display: flex;
+    align-items: center;
+    padding: 0 100px;
+}
+
+.header_logo {
+    height: 100px;
+    width: 100px;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu_list {
+    display: flex;
+}
+
+.menu_list_item {
+    position: relative;
+    border-right: 1px solid black; /* Разделитель между пунктами */
+    &:last-child {
+        border-right: none; /* Убираем разделитель у последнего пункта */
+    }
+}
+
+.menu_link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    color: white; /* Цвет ссылок */
+    font-weight: 700;
+    text-transform: uppercase; /* Строчные буквы */
+}
+
+.menu_list_item:hover .menu_link {
+    background-color: #593E1A; /* Цвет при наведении */
+}
+
+.room-container {
+    display: flex;
+    gap: 20px;
+}
+
+.room-image {
+    flex: 1;
+    max-width: 50%;
+}
+
+.room-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.room-details {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.room-details h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.room-details p {
+    line-height: 1.6;
+    color: #666;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button,
+.pagination span {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #e0e0e0;
+}
+
+.current-page {
+    font-weight: bold;
+    color: black;
+}
+
+.total-pages {
+    font-weight: bold;
+    color: black;
+}
+
+.span_div {
+    font-weight: bold;
+    color: black;
+}
+
+.span {
+    font-weight: bold;
+    color: black;
+}
+
+.dashboard {
+    max-width: 800px;
+    margin: 80px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.application_details div {
+    margin-bottom: 10px;
+}
+
+.application_actions {
+    display: flex; /* Используем Flexbox */
+    justify-content: center; /* Выравниваем по горизонтали */
+    gap: 10px; /* Расстояние между кнопками */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+.approve-btn {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.reject-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.prev,
+.next {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.current-page-employee,
+.total-pages-employee {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+.application_{
+    color: black;
+}
+.application_basicSeat {
+    color: black;
+}
+.application_additionalSeat{
+    color: black;
+}
+.dashboard{
+    color: black;
+}
+.application_type{
+    color: black;
+}
+.application_in{
+    color: black;
+}
+.application_out{
+    color: black;
+}
+.application_name{
+    color: black;
+}
+.applications_list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Расстояние между карточками */
+    padding: 20px;
+}
+.application_card {
+    background-color: white; /* Белый фон */
+    border: 1px solid #ddd; /* Граница */
+    border-radius: 8px; /* Закругленные углы */
+    padding: 15px; /* Внутренние отступы */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
+}
+.application_card div {
+    margin-bottom: 10px; /* Отступ между строками */
+    font-size: 14px; /* Размер шрифта */
+    color: black; /* Цвет текста */
+}

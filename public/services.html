@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Дополнительные услуги</title>
+  <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      .service { margin-bottom: 15px; }
+      .btn {
+          display: inline-block;
+          padding: 10px 20px;
+          background: #4682B4;
+          color: white;
+          text-decoration: none;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+      .btn:hover { background: #5A9BD5; }
+  </style>
+</head>
+<body>
+
+<h2>Выберите дополнительные услуги:</h2>
+
+<div id="servicesList"></div>
+
+<button onclick="saveServices()" class="btn">Сохранить</button>
+
+<script>
+  async function loadServices() {
+    const res = await fetch('/api/get_services');
+    const services = await res.json();
+
+    const container = document.getElementById('servicesList');
+
+    services.forEach(service => {
+      const div = document.createElement('div');
+      div.className = 'service';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = 's' + service.id_service;
+      checkbox.value = service.id_service;
+      checkbox.name = 'service';
+
+      const label = document.createElement('label');
+      label.setAttribute('for', checkbox.id);
+      label.textContent = `${service.name} — ${service.price} ₽`;
+
+      div.appendChild(checkbox);
+      div.appendChild(label);
+
+      container.appendChild(div);
+    });
+  }
+
+  async function saveServices() {
+    try {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      const selected = Array.from(checkboxes).map(cb => {
+        const value = parseInt(cb.value);
+        return isNaN(value) ? null : value;
+      }).filter(Boolean);
+
+      const params = new URLSearchParams(window.location.search);
+      const applicationID = parseInt(params.get('apID'));
+
+      if (isNaN(applicationID)) {
+        alert("Неверный ID заявки.");
+        return;
+      }
+
+      if (selected.length === 0) {
+        alert("Вы не выбрали ни одной услуги.");
+        return;
+      }
+
+      const response = await fetch(`/api/post_services`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_application: applicationID,
+          services: selected
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => null);
+        throw new Error(error?.message || 'Ошибка сервера');
+      }
+
+      alert("Услуги успешно сохранены!");
+      window.location.href = 'indexAfterRegistration.html';
+    } catch (error) {
+      console.error('Ошибка сохранения:', error);
+      alert(error.message || "Произошла ошибка при сохранении услуг");
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadServices);
+</script>
+
+</body>
+</html>

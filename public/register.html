@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация | Гостиница "Кристина"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="header" role="banner" data-fixed="true">
+  <div class="header_container">
+    <div class="header_logo">
+      <img src="Гостиница (1).png" alt="Логотип гостиницы">
+    </div>
+    <div class="header_content">
+      <div class="header_bar">
+        <nav class="menu">
+          <ul class="menu_list">
+            <li class="menu_list_item"><a class="menu_link" href="/main">Главная</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/register">Регистрация</a></li>
+            <li class="menu_list_item"><a class="menu_link" href="/login">Вход</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="auth-container">
+  <section class="auth-form">
+    <h2 style="color:blue">Регистрация</h2>
+    <form id="register-form">
+      <div class="form-group">
+        <label for="phone" style="color:black">Телефон:</label>
+        <input type="text" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password" style="color:black">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password" style="color:black">Повторите пароль:</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+      </div>
+
+      <button type="submit" class="primary-button">Зарегистрироваться</button>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Гостиница "Кристина"</p>
+</footer>
+
+<script>
+  document.getElementById('register-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const userContact = document.getElementById('phone').value;
+    const userPassword = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    if (userPassword !== confirmPassword) {
+      alert("Пароли не совпадают!");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userContact, userPassword })
+      });
+      // Функции для проверки формата контакта
+      const isPhoneNumber = /^\+?\d{10,15}$/.test(userContact); // Проверка номера телефона
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userContact); // Проверка email
+      const data = await response.json();
+      if (response.ok) {
+        alert("Успешная регистрация!");
+        if(isPhoneNumber){
+          window.location.href = `/clientData.html?userContact=${userContact}`;
+        }
+        if(isEmail){
+          window.location.href = '/login.html';
+        }
+      } else {
+        alert("Ошибка: " + data.error);
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert("Произошла ошибка при регистрации.");
+    }
+  });
+</script>
+</body>
+</html>

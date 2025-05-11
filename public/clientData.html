@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация | Гостиница "Кристина"</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<main class="auth-container">
+  <section class="auth-form">
+    <h2 style="color:blue">Регистрация</h2>
+    <form id="clientData-form">
+      <div class="form-group">
+        <label for="surname" style="color:black">Фамилия:</label>
+        <input type="text" id="surname" name="surname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="name" style="color:black">Имя:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="patronymic" style="color:black">Отчество:</label>
+        <input type="text" id="patronymic" name="patronymic" required>
+      </div>
+
+      <div class="form-group">
+        <label for="birthday" style="color:black">Дата рождения:</label>
+        <input type="date" id="birthday" name="birthday" required>
+      </div>
+
+      <div class="form-group">
+        <label for="serial-passport" style="color:black">Серия паспорта:</label>
+        <input type="text" id="serial-passport" name="serial-passport" required>
+      </div>
+
+      <div class="form-group">
+        <label for="number-passport" style="color:black">Номер паспорта:</label>
+        <input type="text" id="number-passport" name="number-passport" required>
+      </div>
+
+      <button type="submit" class="primary-button">Подтвердить</button>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Гостиница "Кристина"</p>
+</footer>
+</html>
+
+<script>
+  document.getElementById('clientData-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    // Получение параметров из URL
+    const params = new URLSearchParams(window.location.search);
+    const clientPhone = params.get('userContact');
+
+    const clientSurname = document.getElementById('surname').value;
+    const clientName = document.getElementById('name').value;
+    const clientPatronymic = document.getElementById('patronymic').value;
+    const clientBirthday = document.getElementById('birthday').value;
+    const clientSerialPassport = document.getElementById('serial-passport').value;
+    const clientNumberPassport = document.getElementById('number-passport').value;
+
+    try {
+      const response = await fetch('/api/client_data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientSurname, clientName, clientPatronymic, clientBirthday, clientSerialPassport, clientNumberPassport, clientPhone })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Данные заполнены успешно!");
+        window.location.href = '/login';
+      } else {
+        alert("Ошибка: " + data.error);
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert("Произошла ошибка при регистрации.");
+    }
+  });
+</script>
